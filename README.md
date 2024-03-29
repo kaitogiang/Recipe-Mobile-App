@@ -2,9 +2,9 @@
 
 Học kỳ 2, Năm học 2023-2024
 
-**MSSV 1** : 
+**MSSV 1** : B2014569
 
-**Họ tên SV 1**:
+**Họ tên SV 1**: Giang Đại Huy
 
 **MSSV 2**:
 
@@ -12,5 +12,5 @@ Học kỳ 2, Năm học 2023-2024
 
 **Lớp học phần**:
 
-**Tên dự án**:
+**Tên dự án**: Ứng dụng nấu ăn
 
