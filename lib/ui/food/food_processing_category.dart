@@ -1,20 +1,19 @@
 
 import 'package:flutter/material.dart';
 
-import '../shared/bottom_navigation_bar.dart';
+import '../shared/scaffold_with_navbar.dart';
 
-class FoodsProcessingCategory extends StatelessWidget {
+class FoodProcessingCategory extends StatelessWidget {
   static const routeName = '/category';
-  const FoodsProcessingCategory({super.key});
+  const FoodProcessingCategory({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Danh mục chế biến'),
       ),
-      bottomNavigationBar: BottomCurveNavigationBar(),
       body: Center(
-        child: const Text('Danh mục chế biến'),
+        child: const Text('Danh mục chế biến', style: TextStyle(color: Colors.red),),
       ),
     );
   }
