@@ -1,5 +1,6 @@
 
 import 'package:ct484_project/models/shopping_list.dart';
+import 'package:ct484_project/ui/auth/auth_manager.dart';
 import 'package:ct484_project/ui/auth/auth_screen.dart';
 import 'package:ct484_project/ui/food/favorite_food_screen.dart';
 import 'package:ct484_project/ui/food/food_overview_screen.dart';
@@ -9,31 +10,42 @@ import 'package:ct484_project/ui/food/food_shopping_list_screen.dart';
 import 'package:ct484_project/ui/food/shopping_list_detail_screen.dart';
 import 'package:ct484_project/ui/food/shopping_list_manager.dart';
 import 'package:ct484_project/ui/shared/scaffold_with_navbar.dart';
+import 'package:ct484_project/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 final _rootNavigatorkey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final _searchingNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'searchNav');
-bool isUserAuthenticated = false;
+bool isUserAuthenticated = true;
 
-void main() {
+Future<void> main() async {
+  //load the .env file
+  await dotenv.load();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-
-  final GoRouter _router = GoRouter(
+  GoRouter router(authManager) {
+    final GoRouter _router = GoRouter(
     navigatorKey: _rootNavigatorkey,
-    initialLocation: isUserAuthenticated ? '/home' : '/login',
+    initialLocation: authManager.isAuth ? '/home' : '/login',
     routes: <RouteBase>[
       //Chuyển hướng tơi trang đăng nhập
       GoRoute(
         name: 'login',
         path: '/login',
-        builder: (context, state) => const AuthScreen()
+        builder: (context, state) => FutureBuilder(
+          future: authManager.tryAutoLogin(),
+          builder: (ctx, snapshot) {
+            return snapshot.connectionState == ConnectionState.waiting
+              ? const SafeArea(child: SplashScreen())
+              : const SafeArea(child: AuthScreen());
+          },
+        )
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -112,7 +124,11 @@ class MyApp extends StatelessWidget {
         ]
       ),
     ],
-  );
+   );
+   return _router;
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -125,48 +141,55 @@ class MyApp extends StatelessWidget {
     );
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (context) => AuthManager(),
+        ),
         //Provider lưu trữ trạng thái ShoppingListManager
         ChangeNotifierProvider(
           create: (context) => ShoppingListManager(),
         )
       ],
-      child: MaterialApp.router(
-          title: 'My Receipt',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            fontFamily: 'Lato',
-            colorScheme: colorScheme,
-            appBarTheme: AppBarTheme(
-              backgroundColor: colorScheme.primary,
-              foregroundColor: colorScheme.onPrimary,
-              elevation: 4,
-              shadowColor: colorScheme.shadow
-            ), 
-            navigationBarTheme: NavigationBarThemeData(
-              labelTextStyle: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.selected)) {
-                  return TextStyle(
-                    color: colorScheme.primary,
-                    fontWeight: FontWeight.bold
-                  );
-                }
-                return TextStyle(color: Colors.grey);
-              }),
-              iconTheme: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.selected)) {
-                  return const IconThemeData(
-                    color: Colors.teal,
-                  );
-                }
-                return const IconThemeData(
-                  color: Colors.grey
-                );
-              }),
-              backgroundColor: colorScheme.background,
-            ),
-          ),  
-          routerConfig: _router,      
-        ),
+      child: Consumer<AuthManager>(
+        builder: (ctx, authManager, child) {
+          return MaterialApp.router(
+              title: 'My Receipt',
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                fontFamily: 'Lato',
+                colorScheme: colorScheme,
+                appBarTheme: AppBarTheme(
+                  backgroundColor: colorScheme.primary,
+                  foregroundColor: colorScheme.onPrimary,
+                  elevation: 4,
+                  shadowColor: colorScheme.shadow
+                ), 
+                navigationBarTheme: NavigationBarThemeData(
+                  labelTextStyle: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.selected)) {
+                      return TextStyle(
+                        color: colorScheme.primary,
+                        fontWeight: FontWeight.bold
+                      );
+                    }
+                    return TextStyle(color: Colors.grey);
+                  }),
+                  iconTheme: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.selected)) {
+                      return const IconThemeData(
+                        color: Colors.teal,
+                      );
+                    }
+                    return const IconThemeData(
+                      color: Colors.grey
+                    );
+                  }),
+                  backgroundColor: colorScheme.background,
+                ),
+              ),  
+              routerConfig: router(authManager),
+            );
+        }
+      ),
     );
   }
   

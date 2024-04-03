@@ -17,23 +17,19 @@ class AuthScreen extends StatelessWidget {
         children: <Widget>[
           Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  const Color.fromRGBO(215, 117, 255, 1).withOpacity(0.5),
-                  const Color.fromRGBO(255, 188, 117, 1).withOpacity(0.9),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                stops: const [0, 1],
+              image: DecorationImage(
+                image: NetworkImage('https://img.freepik.com/premium-photo/fresh-vegetables-pan-chef-hand-green-background_434420-2109.jpg'),
+                fit: BoxFit.cover
               ),
+
             ),
           ),
           SingleChildScrollView(
             child: SizedBox(
-              height: deviceSize.height,
+              height: deviceSize.height+70,
               width: deviceSize.width,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const Flexible(

@@ -33,5 +33,31 @@ class ShoppingList {
   void addListItem(ShoppingItem item) {
     _items.add(item);
   }
-  
+
+  ShoppingList copyWith({
+    String? id,
+    String? name,
+    List<ShoppingItem>? items
+  }) {
+    return ShoppingList(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      items: items ?? this.items
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'items': items
+    };
+  }
+
+  static ShoppingList fromJson(Map<String, dynamic> json) {
+    return ShoppingList(
+      id: json['id'],
+      name: json['name'],
+      items: json['items']
+    );
+  }
 }

@@ -9,32 +9,40 @@ class AppBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20.0),
-      padding: const EdgeInsets.symmetric(
-        vertical: 8.0,
-        horizontal: 94.0,
-      ),
-      transform: Matrix4.rotationZ(-8 * pi / 180)..translate(-10.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.deepOrange.shade900,
-        boxShadow: const [
-          BoxShadow(
-            blurRadius: 8,
-            color: Colors.black26,
-            offset: Offset(0, 2),
-          )
+    return SizedBox(
+      height: 250,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 30,),
+          SizedBox(
+            width: 200,
+            child: Text(
+                'Chào mừng',
+                style: TextStyle(
+                  color: Theme.of(context).indicatorColor,
+                  fontSize: 35,
+                  fontFamily: 'Anton',
+                  fontWeight: FontWeight.bold,
+                ),
+            ),
+          ),
+          SizedBox(
+            width: 300,
+            child: Text(
+                'Hãy đăng nhập vào và tận hưởng ứng dụng',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontFamily: 'Anton',
+                  fontWeight: FontWeight.normal,
+                ),
+            ),
+          ),
+          SizedBox(height: 15,)
         ],
-      ),
-      child: Text(
-        'MyShop',
-        style: TextStyle(
-          color: Theme.of(context).textTheme.titleLarge?.color,
-          fontSize: 50,
-          fontFamily: 'Anton',
-          fontWeight: FontWeight.normal,
-        ),
       ),
     );
   }

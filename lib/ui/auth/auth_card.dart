@@ -83,18 +83,31 @@ class _AuthCardState extends State<AuthCard> {
       ),
       elevation: 8.0,
       child: Container(
-        height: _authMode == AuthMode.signup ? 320 : 260,
+        height: _authMode == AuthMode.signup ? 570 : 350,
         constraints:
             BoxConstraints(minHeight: _authMode == AuthMode.signup ? 320 : 260),
-        width: deviceSize.width * 0.75,
+        width: deviceSize.width * 0.85,
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                _authMode == AuthMode.login ?
+                Text('ĐĂNG NHẬP', style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  fontSize: 25,
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.bold
+                ),) : Text('ĐĂNG KÝ TÀI KHOẢN', style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  fontSize: 25,
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.bold
+                ),),
+                const SizedBox(height: 20,),
                 _buildEmailField(),
+                const SizedBox(height: 20,),
                 _buildPasswordField(),
+                if (_authMode == AuthMode.signup) const SizedBox(height: 20,),
                 if (_authMode == AuthMode.signup) _buildPasswordConfirmField(),
                 const SizedBox(
                   height: 20,
@@ -128,7 +141,7 @@ class _AuthCardState extends State<AuthCard> {
         ),
       ),
       child:
-          Text('${_authMode == AuthMode.login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
+          Text('${_authMode == AuthMode.login ? 'TẠO TÀI KHOẢN MỚI' : 'QUAY VỀ ĐĂNG NHẬP'}'),
     );
   }
 
@@ -137,25 +150,30 @@ class _AuthCardState extends State<AuthCard> {
       onPressed: _submit,
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(10),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+        fixedSize: Size(300, 50)
       ),
-      child: Text(_authMode == AuthMode.login ? 'LOGIN' : 'SIGN UP'),
+      child: Text(_authMode == AuthMode.login ? 'ĐĂNG NHẬP' : 'ĐĂNG KÝ'),
     );
   }
 
   Widget _buildPasswordConfirmField() {
     return TextFormField(
       enabled: _authMode == AuthMode.signup,
-      decoration: const InputDecoration(labelText: 'Confirm Password'),
+      decoration: const InputDecoration(labelText: 'Xác nhận mật khẩu', border: OutlineInputBorder(), 
+      prefixIcon: Stack(alignment: Alignment.center,children: [Icon(Icons.lock_outline), Padding(
+        padding: EdgeInsets.only(left: 6, bottom: 3),
+        child: Icon(Icons.check),
+      )],)),
       obscureText: true,
       validator: _authMode == AuthMode.signup
           ? (value) {
               if (value != _passwordController.text) {
-                return 'Passwords do not match!';
+                return 'Mật khẩu không khớp!';
               }
               return null;
             }
@@ -165,7 +183,7 @@ class _AuthCardState extends State<AuthCard> {
 
   Widget _buildPasswordField() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: 'Password'),
+      decoration: const InputDecoration(labelText: 'Mật khẩu', border: OutlineInputBorder(), prefixIcon: Icon(Icons.lock)),
       obscureText: true,
       controller: _passwordController,
       validator: (value) {
@@ -182,7 +200,7 @@ class _AuthCardState extends State<AuthCard> {
 
   Widget _buildEmailField() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: 'E-Mail'),
+      decoration: const InputDecoration(labelText: 'E-Mail',border: OutlineInputBorder(), prefixIcon: Icon(Icons.mail)),
       keyboardType: TextInputType.emailAddress,
       validator: (value) {
         if (value!.isEmpty || !value.contains('@')) {
