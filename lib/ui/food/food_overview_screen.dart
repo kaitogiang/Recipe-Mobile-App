@@ -1,8 +1,6 @@
 
 import 'package:ct484_project/ui/shared/scaffold_with_navbar.dart';
 import 'package:flutter/material.dart';
-import 'package:molten_navigationbar_flutter/molten_navigationbar_flutter.dart';
-
 import 'food_processing_category.dart';
 
 class FoodOverviewScreen extends StatelessWidget {
