@@ -37,4 +37,18 @@ class ShoppingItem {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'isCheck': isCheck.toString()
+    };
+  }
+
+  static ShoppingItem fromJson(Map<String, dynamic> json) {
+    return ShoppingItem(
+      id: json['id'],
+      name: json['name'],
+      isCheck: json['isCheck'].compareTo("true") == 0 ? true : false
+    );
+  }
 }

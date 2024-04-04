@@ -145,8 +145,14 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthManager(),
         ),
         //Provider lưu trữ trạng thái ShoppingListManager
-        ChangeNotifierProvider(
-          create: (context) => ShoppingListManager(),
+        ChangeNotifierProxyProvider<AuthManager, ShoppingListManager>(
+          create: (ctx) => ShoppingListManager(),
+          update: (ctx, authManager, shoppingListManager) {
+            //Khi authManager có báo hiệu thay đổi thì đọc lại authToken
+            //cho ShoppingListManager
+            shoppingListManager!.authToken = authManager.authToken;
+            return shoppingListManager;
+          },
         )
       ],
       child: Consumer<AuthManager>(

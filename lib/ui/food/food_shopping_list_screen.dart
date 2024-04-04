@@ -46,42 +46,54 @@ class _FoodShoppingListScreenState extends State<FoodShoppingListScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 10),
-        child: Consumer<ShoppingListManager>(
-          builder: (context, shoppingListManager, child) {
-            return ListView.builder(
-              itemCount: shoppingListManager.itemCount,
-              itemBuilder: (ctx, i) {
-                final item = shoppingListManager.items[i];
-                return Dismissible(
-                  key: Key(item.id!),
-                  onDismissed: (direction) {
-                    //Xóa một danh sách dựa vào id của nó
-                    shoppingListManager.removeShoppingList(item.id!);
-                    //Hiển thị hộp thoải thông báo thành công
-                    ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text('Đã xóa thành công')));
-                  },
-                  direction: DismissDirection.endToStart,
-                  confirmDismiss: (direction) async {
-                    return await showConfirmDialog(context, 'Bạn chắc chắn xóa danh sách này, hành động này sẽ không thể hoàn tác lại', 'Xóa danh sách mua sắm??');
-                  },
-                  background: Container(
-                    color: Colors.red,
-                    alignment: Alignment.centerRight,
-                    padding: EdgeInsets.only(right: 20),
-                    child: Icon(
-                      Icons.delete, color: Theme.of(context).indicatorColor,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      InkWell(child: FoodShoppingListTile(shoppingListManager.items[i])),
-                      const Divider()
-                    ],
-                  ),
-                );
-                
-              },
+        child: FutureBuilder(
+          future: context.read<ShoppingListManager>().fetchShoppingList(),
+          builder: (ctx, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return RefreshIndicator(
+              onRefresh: () => context.read<ShoppingListManager>().fetchShoppingList(),
+              child: Consumer<ShoppingListManager>(
+                builder: (context, shoppingListManager, child) {
+                  return ListView.builder(
+                    itemCount: shoppingListManager.itemCount,
+                    itemBuilder: (ctx, i) {
+                      final item = shoppingListManager.items[i];
+                      return Dismissible(
+                        key: Key(item.id!),
+                        onDismissed: (direction) {
+                          //Xóa một danh sách dựa vào id của nó
+                          shoppingListManager.removeShoppingList(item.id!);
+                          //Hiển thị hộp thoải thông báo thành công
+                          ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text('Đã xóa thành công')));
+                        },
+                        direction: DismissDirection.endToStart,
+                        confirmDismiss: (direction) async {
+                          return await showConfirmDialog(context, 'Bạn chắc chắn xóa danh sách này, hành động này sẽ không thể hoàn tác lại', 'Xóa danh sách mua sắm??');
+                        },
+                        background: Container(
+                          color: Colors.red,
+                          alignment: Alignment.centerRight,
+                          padding: EdgeInsets.only(right: 20),
+                          child: Icon(
+                            Icons.delete, color: Theme.of(context).indicatorColor,
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            InkWell(child: FoodShoppingListTile(shoppingListManager.items[i])),
+                            const Divider()
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }
+              ),
             );
           }
         ),

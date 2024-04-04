@@ -42,7 +42,7 @@ class AuthService {
 
       final authToken = _fromJson(responseJson);
       _saveAuthToken(authToken);
-      print(authToken.token!);
+      print('token :${authToken.token!}');
       return authToken;
     } catch (error) {
       print(error);

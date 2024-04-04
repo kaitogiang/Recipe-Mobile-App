@@ -53,7 +53,7 @@ class _ShoppingListDetailScreenState extends State<ShoppingListDetailScreen> {
         itemCount: items.items.length,
         itemBuilder: (ctx, i) => Column(
           children: [
-            ShoppingItemListTile(items.items[i])
+            ShoppingItemListTile(items.items[i], items.id!)
           ],
         ),
       ),
@@ -144,8 +144,9 @@ class _ShoppingListDetailScreenState extends State<ShoppingListDetailScreen> {
 
 class ShoppingItemListTile extends StatelessWidget {
   final ShoppingItem listItem; //Đây là một mục cần mua
+  final String shoppingListId;
   const ShoppingItemListTile(
-    this.listItem, {super.key}
+    this.listItem, this.shoppingListId, {super.key}
   );
 
   @override
@@ -159,7 +160,7 @@ class ShoppingItemListTile extends StatelessWidget {
               checkColor: Colors.white,
               value: listItem.isCheck,
               onChanged: (value) {
-                context.read<ShoppingListManager>().toggleCheckBox(listItem);
+                context.read<ShoppingListManager>().toggleCheckBox(listItem, shoppingListId);
               },
             );
           },
@@ -176,7 +177,7 @@ class ShoppingItemListTile extends StatelessWidget {
         ),
         onTap: () {
           print('Đánh dấu hoàn thành cho ${listItem.itemName}');
-          context.read<ShoppingListManager>().toggleCheckBox(listItem);
+          context.read<ShoppingListManager>().toggleCheckBox(listItem, shoppingListId);
         },
       );
   }
