@@ -10,7 +10,7 @@ Học kỳ 2, Năm học 2023-2024
 
 **Họ tên SV 2**:
 
-**Lớp học phần**:
+**Lớp học phần**: 03
 
 **Tên dự án**: Ứng dụng nấu ăn
 
