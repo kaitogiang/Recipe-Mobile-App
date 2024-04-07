@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'user_popup_menu.dart';
-
 class ScaffoldWithNavBar extends StatelessWidget {
   const ScaffoldWithNavBar({
     required this.navigationShell,
@@ -20,8 +18,8 @@ class ScaffoldWithNavBar extends StatelessWidget {
       bottomNavigationBar: NavigationBar(
         destinations: <NavigationDestination>[
           NavigationDestination(
-            icon: Icon(Icons.search),
-            label: 'Tìm kiếm',
+            icon: Icon(Icons.person_2),
+            label: 'Tôi',
           ),
           NavigationDestination(
             icon: Icon(Icons.favorite),

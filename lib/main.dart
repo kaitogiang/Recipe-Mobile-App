@@ -5,16 +5,18 @@ import 'package:ct484_project/ui/auth/auth_screen.dart';
 import 'package:ct484_project/ui/food/favorite_food_screen.dart';
 import 'package:ct484_project/ui/food/food_overview_screen.dart';
 import 'package:ct484_project/ui/food/food_processing_category.dart';
-import 'package:ct484_project/ui/food/food_search_screen.dart';
 import 'package:ct484_project/ui/food/food_shopping_list_screen.dart';
 import 'package:ct484_project/ui/food/shopping_list_detail_screen.dart';
 import 'package:ct484_project/ui/food/shopping_list_manager.dart';
+import 'package:ct484_project/ui/food/user_food_recipe.dart';
+import 'package:ct484_project/ui/food/user_food_recipe_form.dart';
 import 'package:ct484_project/ui/shared/scaffold_with_navbar.dart';
 import 'package:ct484_project/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 
 final _rootNavigatorkey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final _searchingNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'searchNav');
@@ -59,9 +61,16 @@ class MyApp extends StatelessWidget {
             navigatorKey: _searchingNavigatorKey,
             routes: <RouteBase>[
               GoRoute(
-                name: 'search',
-                path: '/search',
-                builder: (context, state) => const SafeArea(child: FoodSearchScreen()),
+                name: 'user-food',
+                path: '/userfood',
+                builder: (context, state) => const SafeArea(child: UserFoodRecipe()),
+                routes: <RouteBase>[
+                  GoRoute(
+                    name: 'user-form',
+                    path: 'userform',
+                    builder: (context, state) =>  SafeArea(child: UserFoodRecipeForm(null)),
+                  )
+                ]
               )
             ]
           ),
