@@ -57,6 +57,7 @@ class _UserFoodRecipeFormState extends State<UserFoodRecipeForm> {
     _editFood = widget.foodRecipe;
     _imageUrlController.text = _editFood.imageUrl;
     imageUrl = _editFood.imageUrl.isNotEmpty ? _editFood.imageUrl : null;
+    selectedIcon = _editFood.isPublic ? IconLabel.public : IconLabel.private;
     super.initState();
   }
 
@@ -242,7 +243,7 @@ class _UserFoodRecipeFormState extends State<UserFoodRecipeForm> {
     try {
       final foodRecipesManager = context.read<FoodRecipesManager>();
       if (_editFood.id != null) {
-        print("cap nhat thoi");
+        await foodRecipesManager.updateFoodRecipe(_editFood);
       } else {
         await foodRecipesManager.addFoodRecipe(_editFood);
       }

@@ -37,4 +37,20 @@ class FoodRecipesManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateFoodRecipe(FoodRecipe food) async {
+    final index = _items.indexWhere((item) => item.id == food.id);
+    if (index >= 0) {
+      if (await _foodRecipeService.updateFoodRecipe(food)) {
+        _items[index] = food;
+        notifyListeners();
+      }
+    }
+  }
+
+  Future<void> removeFoodRecipe(String foodId) async {
+    if (await _foodRecipeService.removeFoodRecipe(foodId)) {
+      _items.removeWhere((element) => element.id!.compareTo(foodId)==0);
+    }
+    notifyListeners();
+  }
 }

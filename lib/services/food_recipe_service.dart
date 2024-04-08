@@ -59,4 +59,33 @@ class FoodRecipeService extends FirebaseService {
       return null;
     }
   }
+
+  Future<bool> updateFoodRecipe(FoodRecipe foodRecipe) async {
+    try {
+      await httpFetch(
+        '$databaseUrl/foodRecipes/${foodRecipe.id}.json?auth=$token',
+        method: HttpMethod.patch,
+        body: jsonEncode(foodRecipe.toJson()),
+      );
+      return true;
+    } catch(error) {
+      log(error.toString());
+      return false;
+    }
+  }
+
+  //Hàm xóa một công thức nấu ăn
+  Future<bool> removeFoodRecipe(String foodRecipeId) async {
+    try {
+      await httpFetch(
+        '$databaseUrl/foodRecipes/$foodRecipeId.json?auth=$token',
+        method: HttpMethod.delete
+      );
+      return true;
+
+    } catch(error) {
+      log(error.toString());
+      return false;
+    }
+  }
 }
