@@ -5,6 +5,7 @@ class FoodRecipe {
   final String title;
   final String ingredient;
   final String processing;
+  final String imageUrl;
   final ValueNotifier<bool> _isPublic;
 
   FoodRecipe({
@@ -12,6 +13,7 @@ class FoodRecipe {
     required this.title,
     required this.ingredient,
     required this.processing,
+    required this.imageUrl,
     isPublic = false,
   }) : _isPublic = ValueNotifier(isPublic);
 
@@ -32,6 +34,7 @@ class FoodRecipe {
     String? title,
     String? ingredient,
     String? processing,
+    String? imageUrl,
     bool? isPublic,
   }) {
     return FoodRecipe(
@@ -39,7 +42,29 @@ class FoodRecipe {
       title: title ?? this.title,
       ingredient: ingredient ?? this.ingredient,
       processing: processing ?? this.processing,
+      imageUrl: imageUrl ?? this.imageUrl,
       isPublic: isPublic ?? this.isPublic
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'ingredient': ingredient,
+      'processing': processing,
+      'imageUrl': imageUrl,
+      'isPublic': isPublic.toString()
+    };
+  }
+
+  static FoodRecipe fromJson(Map<String, dynamic> json) {
+    return FoodRecipe(
+      id: json['id'],
+      title: json['title'],
+      ingredient: json['ingredient'],
+      processing: json['processing'],
+      imageUrl: json['imageUrl'],
+      isPublic: json['isPublic'].compareTo("true")==0 ? true : false
     );
   }
 }

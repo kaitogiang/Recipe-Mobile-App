@@ -1,10 +1,12 @@
 
+import 'package:ct484_project/models/food_recipe.dart';
 import 'package:ct484_project/models/shopping_list.dart';
 import 'package:ct484_project/ui/auth/auth_manager.dart';
 import 'package:ct484_project/ui/auth/auth_screen.dart';
 import 'package:ct484_project/ui/food/favorite_food_screen.dart';
 import 'package:ct484_project/ui/food/food_overview_screen.dart';
 import 'package:ct484_project/ui/food/food_processing_category.dart';
+import 'package:ct484_project/ui/food/food_recipes_manager.dart';
 import 'package:ct484_project/ui/food/food_shopping_list_screen.dart';
 import 'package:ct484_project/ui/food/shopping_list_detail_screen.dart';
 import 'package:ct484_project/ui/food/shopping_list_manager.dart';
@@ -68,7 +70,7 @@ class MyApp extends StatelessWidget {
                   GoRoute(
                     name: 'user-form',
                     path: 'userform',
-                    builder: (context, state) =>  SafeArea(child: UserFoodRecipeForm(null)),
+                    builder: (context, state) =>  SafeArea(child: UserFoodRecipeForm(state.extra == null ? null: state.extra as FoodRecipe)),
                   )
                 ]
               )
@@ -161,6 +163,15 @@ class MyApp extends StatelessWidget {
             //cho ShoppingListManager
             shoppingListManager!.authToken = authManager.authToken;
             return shoppingListManager;
+          },
+        ),
+        ChangeNotifierProxyProvider<AuthManager, FoodRecipesManager>(
+          create: (ctx) => FoodRecipesManager(),
+          update: (ctx, authManager, foodRecipesManager) {
+            //Khi authManager có báo hiệu thay đổi thì đọc lại authToken
+            //cho foodRecipesManager
+            foodRecipesManager!.authToken = authManager.authToken;
+            return foodRecipesManager;
           },
         )
       ],

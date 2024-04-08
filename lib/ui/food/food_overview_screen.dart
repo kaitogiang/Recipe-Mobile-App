@@ -16,6 +16,14 @@ class FoodOverviewScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Trang chủ'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              context.read<AuthManager>().logout();
+            },
+          )
+        ],
       ),
       body: Center(
         child: Column(
