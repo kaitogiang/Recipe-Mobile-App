@@ -14,7 +14,7 @@ class UserFoodRecipeLargeMode extends StatelessWidget {
     return Consumer<FoodRecipesManager>(
       builder: (ctx, foodRecipesManager, child) {
         return ListView.builder(
-          itemCount: foodRecipesManager.itemCount,
+          itemCount: foodRecipesManager.items.length,
           itemBuilder: (context, index) {
             return UserFoodRecipeLargList(foodRecipesManager.items[index]);
           },

@@ -1,6 +1,7 @@
 
 import 'package:ct484_project/models/food_recipe.dart';
 import 'package:ct484_project/ui/food/food_recipes_manager.dart';
+import 'package:ct484_project/ui/food/food_search_field.dart';
 import 'package:ct484_project/ui/food/user_food_recipe_detail_mode.dart';
 import 'package:ct484_project/ui/food/user_food_recipe_large_mode.dart';
 import 'package:flutter/foundation.dart';
@@ -29,6 +30,10 @@ class _UserFoodRecipeState extends State<UserFoodRecipe> {
       ),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: FoodSearchField(),
+          ),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Row(
