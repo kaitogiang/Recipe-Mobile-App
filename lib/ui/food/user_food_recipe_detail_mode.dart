@@ -44,6 +44,7 @@ class UserFoodRecipeList extends StatelessWidget {
         ),
         onTap: () {
           print("Xem chi tiet");
+          context.goNamed("user-food-detail",extra: foodRecipe);
         },
         onLongPress: () {
           print("Chinh sua hoac xoa");

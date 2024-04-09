@@ -6,6 +6,7 @@ import 'package:ct484_project/ui/auth/auth_screen.dart';
 import 'package:ct484_project/ui/food/favorite_food_screen.dart';
 import 'package:ct484_project/ui/food/food_overview_screen.dart';
 import 'package:ct484_project/ui/food/food_processing_category.dart';
+import 'package:ct484_project/ui/food/food_recipe_detail_screen.dart';
 import 'package:ct484_project/ui/food/food_recipes_manager.dart';
 import 'package:ct484_project/ui/food/food_shopping_list_screen.dart';
 import 'package:ct484_project/ui/food/shopping_list_detail_screen.dart';
@@ -71,6 +72,11 @@ class MyApp extends StatelessWidget {
                     name: 'user-form',
                     path: 'userform',
                     builder: (context, state) =>  SafeArea(child: UserFoodRecipeForm(state.extra == null ? null: state.extra as FoodRecipe)),
+                  ),
+                  GoRoute(
+                    name: 'user-food-detail',
+                    path: 'user-food-detail',
+                    builder: (context, state) => SafeArea(child: FoodRecipeDetailScreen(state.extra as FoodRecipe)),
                   )
                 ]
               )
