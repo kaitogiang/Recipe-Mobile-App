@@ -59,7 +59,7 @@ class _UserFoodRecipeState extends State<UserFoodRecipe> {
                     valueListenable: _isDetailView,
                     builder: (context, value, child) {
                       if (value) {
-                        return const UserFoodRecipeDetailMode();
+                        return const UserFoodRecipeDetailMode(false);
                       } else {
                         return const UserFoodRecipeLargeMode();
                       }

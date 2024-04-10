@@ -6,29 +6,38 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class UserFoodRecipeDetailMode extends StatelessWidget {
-  const UserFoodRecipeDetailMode({super.key});
+  const UserFoodRecipeDetailMode(this.showFavorite, {super.key});
+
+  final bool showFavorite;
 
   @override
   Widget build(BuildContext context) {
 
     return Consumer<FoodRecipesManager>(
       builder: (ctx, foodRecipesManager, child) {
-        return foodRecipesManager.items.length ==0 ? const Center(child: Text("Không tìm thấy công thức", style: TextStyle(fontSize: 20),),)
+        return !showFavorite ? (foodRecipesManager.items.length ==0 ? const Center(child: Text("Không tìm thấy công thức", style: TextStyle(fontSize: 20),),)
         : ListView.builder(
           itemCount: foodRecipesManager.items.length,
           itemBuilder: (context, index) {
             return UserFoodRecipeList(foodRecipesManager.items[index]);
           },
-        );
+        )) 
+        : (foodRecipesManager.favoriteItems.length == 0 ? const Center(child: Text('Chưa có sản phẩm yêu thích nào', style: TextStyle(fontSize: 20),),)
+        : ListView.builder(
+          itemCount: foodRecipesManager.favoriteItems.length,
+          itemBuilder: (context, index) {
+            return UserFoodRecipeList(foodRecipesManager.favoriteItems[index], isShowFavorite: true,);
+          },
+        ));
       }
     );
   }
 }
 
 class UserFoodRecipeList extends StatelessWidget {
-  const UserFoodRecipeList(this.foodRecipe, {super.key});
-
+  const UserFoodRecipeList(this.foodRecipe, {super.key, this.isShowFavorite = false});
   final FoodRecipe foodRecipe;
+  final bool isShowFavorite;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +54,11 @@ class UserFoodRecipeList extends StatelessWidget {
         ),
         onTap: () {
           print("Xem chi tiet");
-          context.goNamed("user-food-detail",extra: foodRecipe);
+          if(!isShowFavorite) {
+            context.goNamed("user-food-detail",extra: foodRecipe);
+          } else {
+            context.goNamed("favorite-food-detail", extra: foodRecipe);
+          }
         },
         onLongPress: () {
           print("Chinh sua hoac xoa");

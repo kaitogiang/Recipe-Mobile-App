@@ -90,6 +90,13 @@ class MyApp extends StatelessWidget {
                 name: 'favorite',
                 path: '/favorite',
                 builder: (context, state) => const SafeArea(child: FavoriteFoddScreen()),
+                routes: <RouteBase>[
+                  GoRoute(
+                    name: 'favorite-food-detail',
+                    path: 'favorite-food-detail',
+                    builder: (context, state) => SafeArea(child: FoodRecipeDetailScreen(state.extra as FoodRecipe)),
+                  )
+                ]
               )
             ]
           ),

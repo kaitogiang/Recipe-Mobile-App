@@ -24,6 +24,10 @@ class FoodRecipesManager extends ChangeNotifier {
     }
   }
 
+  List<FoodRecipe> get favoriteItems {
+    return _items.where((item) => item.isFavorite).toList();
+  }
+
   String removeVietnameseAccent(String origin) {
     Map<String, List<String>> template = {
     'a': ['á', 'à', 'ã', 'ạ', 'â', 'ấ', 'ầ', 'ẫ', 'ậ', 'ă', 'ắ', 'ằ', 'ẵ', 'ặ'],
@@ -54,6 +58,12 @@ class FoodRecipesManager extends ChangeNotifier {
 
   int get itemCount => _items.length;
 
+  Future<void> fetchAllFoodRecipe() async {
+    _items = await _foodRecipeService.fetchFoodRecipe();
+    notifyListeners();
+  }
+
+
   Future<void> fetchUserFoodRecipe() async {
     _items = await _foodRecipeService.fetchFoodRecipe(
       filteredByUser: true
@@ -83,6 +93,15 @@ class FoodRecipesManager extends ChangeNotifier {
   Future<void> removeFoodRecipe(String foodId) async {
     if (await _foodRecipeService.removeFoodRecipe(foodId)) {
       _items.removeWhere((element) => element.id!.compareTo(foodId)==0);
+    }
+    notifyListeners();
+  }
+
+  Future<void> toggleFavoriteFoodRecipe(FoodRecipe foodRecipe) async {
+    final savedState = foodRecipe.isFavorite;
+    foodRecipe.isFavorite = !savedState;
+    if(!await _foodRecipeService.toggleFavoriteFoodRecipe(foodRecipe)) {
+      foodRecipe.isFavorite = savedState;
     }
     notifyListeners();
   }

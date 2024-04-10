@@ -1,5 +1,7 @@
 import 'package:ct484_project/models/food_recipe.dart';
+import 'package:ct484_project/ui/food/food_recipes_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FoodRecipeDetailScreen extends StatelessWidget {
   const FoodRecipeDetailScreen(this.foodRecipe, {super.key});
@@ -53,7 +55,9 @@ class FoodRecipeDetailScreen extends StatelessWidget {
                       ValueListenableBuilder(
                         valueListenable: foodRecipe.isFavoriteListenable,
                         builder: (context, value, child) =>  
-                        IconButton(icon: Icon(foodRecipe.isFavorite ? Icons.favorite : Icons.favorite_border) ,onPressed: () => print("Yêu thích"),)
+                        IconButton(icon: Icon(foodRecipe.isFavorite ? Icons.favorite : Icons.favorite_border, color: Colors.pink,) ,
+                        onPressed: () => context.read<FoodRecipesManager>().toggleFavoriteFoodRecipe(foodRecipe),
+                        )
                       )
                     ],
                   ),

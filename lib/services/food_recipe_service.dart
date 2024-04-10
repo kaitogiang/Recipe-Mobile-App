@@ -20,12 +20,18 @@ class FoodRecipeService extends FirebaseService {
         method: HttpMethod.get
       ) as Map<String, dynamic>?;
 
+      final favoriteMap = await httpFetch(
+        '$databaseUrl/favoriteFoodRecipe/$userId.json?auth=$token',
+        method: HttpMethod.get
+      ) as Map<String, dynamic>?;
+
       foodMap?.forEach((foodRecipeId, foodRecipe) { 
+        final isFavorite = favoriteMap == null ? false : favoriteMap!.containsKey(foodRecipeId);
         food.add(
           FoodRecipe.fromJson({
             'id': foodRecipeId,
             ...foodRecipe,
-          })
+          }).copyWith(isFavorite: isFavorite)
         );
       });
       return food;
@@ -83,6 +89,28 @@ class FoodRecipeService extends FirebaseService {
       );
       return true;
 
+    } catch(error) {
+      log(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> toggleFavoriteFoodRecipe(FoodRecipe foodRecipe) async {
+    try {
+      if (foodRecipe.isFavorite) {
+        await httpFetch(
+          '$databaseUrl/favoriteFoodRecipe/$userId/${foodRecipe.id}.json?auth=$token',
+          method: HttpMethod.put,
+          body: jsonEncode(foodRecipe.isFavorite)
+        );
+      } else {
+        await httpFetch(
+          '$databaseUrl/favoriteFoodRecipe/$userId/${foodRecipe.id}.json?auth=$token',
+          method: HttpMethod.delete
+        );
+      }
+      
+      return true;
     } catch(error) {
       log(error.toString());
       return false;
