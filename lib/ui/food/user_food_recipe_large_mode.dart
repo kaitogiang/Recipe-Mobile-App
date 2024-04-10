@@ -13,7 +13,8 @@ class UserFoodRecipeLargeMode extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<FoodRecipesManager>(
       builder: (ctx, foodRecipesManager, child) {
-        return ListView.builder(
+        return foodRecipesManager.items.length ==0 ? const Center(child: Text("Không tìm thấy công thức", style: TextStyle(fontSize: 20),),)
+        : ListView.builder(
           itemCount: foodRecipesManager.items.length,
           itemBuilder: (context, index) {
             return UserFoodRecipeLargList(foodRecipesManager.items[index]);
@@ -46,7 +47,10 @@ class UserFoodRecipeLargList extends StatelessWidget {
             ),
             const SizedBox(height: 12,),
             Text(foodRecipe.title, style: Theme.of(context).textTheme.titleLarge,softWrap: true,textAlign: TextAlign.center,),
-            Text(foodRecipe.ingredient, style: Theme.of(context).textTheme.titleSmall,),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Text(foodRecipe.ingredient, style: Theme.of(context).textTheme.titleSmall, textAlign: TextAlign.center,),
+            ),
             const SizedBox(height: 12,)
           ],
         ),

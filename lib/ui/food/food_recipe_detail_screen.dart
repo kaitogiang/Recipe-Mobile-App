@@ -8,6 +8,19 @@ class FoodRecipeDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final String type;
+    switch(foodRecipe.type) {
+      case CookingType.grilling: type = "Món nướng"; break;
+      case CookingType.stirFrying: type = "Món xào"; break;
+      case CookingType.steaming: type = "Món hấp"; break;
+      case CookingType.boiling: type = "Món luộc"; break;
+      case CookingType.drying: type = "Món sấy"; break;
+      case CookingType.mixing: type = "Món trộn"; break;
+      case CookingType.cooking: type = "Món nấu"; break;
+      default: type = "Khác"; break;
+    };
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chi tiết công thức nấu ăn'),
@@ -37,7 +50,25 @@ class FoodRecipeDetailScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(child: Text(foodRecipe.title.toUpperCase(), style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold), softWrap: true,)),
-                      IconButton(icon: Icon(Icons.favorite_border),onPressed: () => print("Yêu thích"),)
+                      ValueListenableBuilder(
+                        valueListenable: foodRecipe.isFavoriteListenable,
+                        builder: (context, value, child) =>  
+                        IconButton(icon: Icon(foodRecipe.isFavorite ? Icons.favorite : Icons.favorite_border) ,onPressed: () => print("Yêu thích"),)
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(8),
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: [
+                      Icon(Icons.category, color: Theme.of(context).primaryColor ,size: 25),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 5),
+                        child: Text('Loại chế biến:', softWrap: true, style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 20),),
+                      ),
+                      Text(type.toLowerCase(), softWrap: true, style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 20),)
                     ],
                   ),
                 ),

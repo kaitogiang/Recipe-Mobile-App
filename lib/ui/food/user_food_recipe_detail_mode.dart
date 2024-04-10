@@ -13,7 +13,8 @@ class UserFoodRecipeDetailMode extends StatelessWidget {
 
     return Consumer<FoodRecipesManager>(
       builder: (ctx, foodRecipesManager, child) {
-        return ListView.builder(
+        return foodRecipesManager.items.length ==0 ? const Center(child: Text("Không tìm thấy công thức", style: TextStyle(fontSize: 20),),)
+        : ListView.builder(
           itemCount: foodRecipesManager.items.length,
           itemBuilder: (context, index) {
             return UserFoodRecipeList(foodRecipesManager.items[index]);
