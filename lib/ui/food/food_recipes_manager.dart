@@ -1,10 +1,14 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:ct484_project/models/auth_token.dart';
 import 'package:ct484_project/models/food_recipe.dart';
 import 'package:ct484_project/services/food_recipe_service.dart';
 import 'package:flutter/material.dart';
-
 class FoodRecipesManager extends ChangeNotifier {
-  List<FoodRecipe> _items = [];
+  List<FoodRecipe> _items = []; //Lưu trữ sản phẩm của người dùng cụ thể
+  List<FoodRecipe> _allItems = []; //Lưu trữ tất cả sản phẩm
+
   String _searchText = '';
 
   final FoodRecipeService _foodRecipeService;
@@ -22,6 +26,51 @@ class FoodRecipesManager extends ChangeNotifier {
     } else {
       return _items.where((foodRecipe) => removeVietnameseAccent(foodRecipe.title).contains(_searchText)).toList();
     }
+  }
+
+  List<FoodRecipe> get allItems {
+    return [..._allItems];
+  }
+
+  List<Map<String, List<FoodRecipe>>> get foodByTypeList {
+    Map<CookingType, String> getCookingTypeString = {
+      CookingType.grilling: "Món nướng",
+      CookingType.stirFrying: "Món xào",
+      CookingType.steaming: "Món hấp",
+      CookingType.boiling: "Món luộc",
+      CookingType.drying: "Món sấy",
+      CookingType.mixing: "Món trộn",
+      CookingType.cooking: "Món nấu",
+      CookingType.other: "Món khác"
+    };
+
+    List<Map<String, List<FoodRecipe>>> typeList = [];
+    Map<String, List<FoodRecipe>> map = {}; //Map dùng để lưu trữ loại và danh sách tương ứng
+     //Tạo gợi ý hôm nay
+    List<FoodRecipe> randomizedList = [..._allItems];
+    var random = new Random();
+    //Shuffle the list
+    randomizedList.shuffle(random);
+    //Lấy 5 phần tử đầu tiên
+    List<FoodRecipe> recommendList = randomizedList.take(5).toList();
+    map["Gợi ý hôm này"] = recommendList;
+
+    typeList.add(map);
+
+    for(CookingType type in CookingType.values) {
+      Map<String, List<FoodRecipe>> map = {};
+      List<FoodRecipe> sublist = [];
+      String typeString = getCookingTypeString[type]!;
+      _allItems.forEach((foodRecipe) { 
+        if (type == foodRecipe.type && sublist.length < 5) {
+          sublist.add(foodRecipe);
+        }
+      });
+      map[typeString] = sublist;
+      typeList.add(map);
+    }
+
+    return typeList;
   }
 
   List<FoodRecipe> get favoriteItems {
@@ -59,7 +108,7 @@ class FoodRecipesManager extends ChangeNotifier {
   int get itemCount => _items.length;
 
   Future<void> fetchAllFoodRecipe() async {
-    _items = await _foodRecipeService.fetchFoodRecipe();
+    _allItems = await _foodRecipeService.fetchFoodRecipe();
     notifyListeners();
   }
 
@@ -105,4 +154,5 @@ class FoodRecipesManager extends ChangeNotifier {
     }
     notifyListeners();
   }
+
 }

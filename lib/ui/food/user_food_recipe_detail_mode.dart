@@ -48,7 +48,7 @@ class UserFoodRecipeList extends StatelessWidget {
         splashColor: Theme.of(context).focusColor,
         borderRadius: BorderRadius.all(Radius.circular(10)),
         child: ListTile(
-          subtitle: Text(foodRecipe.ingredient),
+          subtitle: Text(foodRecipe.ingredient, overflow: TextOverflow.ellipsis, maxLines: 2,),
           title: Text(foodRecipe.title),
           leading: Image.network(foodRecipe.imageUrl, fit: BoxFit.fill, width: 100, height: 100,)
         ),

@@ -46,10 +46,17 @@ class UserFoodRecipeLargList extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             const SizedBox(height: 12,),
-            Text(foodRecipe.title, style: Theme.of(context).textTheme.titleLarge,softWrap: true,textAlign: TextAlign.center,),
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: Text(foodRecipe.title, style: Theme.of(context).textTheme.titleLarge,softWrap: true,textAlign: TextAlign.center,),
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Text(foodRecipe.ingredient, style: Theme.of(context).textTheme.titleSmall, textAlign: TextAlign.center,),
+              child: Text(foodRecipe.ingredient, 
+                style: Theme.of(context).textTheme.titleSmall, 
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis, maxLines: 2,
+              ),
             ),
             const SizedBox(height: 12,)
           ],
