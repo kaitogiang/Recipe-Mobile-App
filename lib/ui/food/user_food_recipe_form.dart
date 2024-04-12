@@ -1,10 +1,12 @@
+import 'dart:developer';
 import 'dart:io';
-import 'dart:math';
 import 'package:ct484_project/models/food_recipe.dart';
+import 'package:ct484_project/services/storage_service.dart';
 import 'package:ct484_project/ui/food/food_recipes_manager.dart';
 import 'package:ct484_project/ui/shared/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 enum IconLabel {
@@ -141,6 +143,10 @@ class _UserFoodRecipeFormState extends State<UserFoodRecipeForm> {
                   onPressed: () {
                     _saveForm();
                   },
+                ),
+                ElevatedButton(
+                  child: const Text('Chọn hình'),
+                  onPressed: _pickAndUpLoadImage,
                 )
               ],
             ),
@@ -348,5 +354,18 @@ class _UserFoodRecipeFormState extends State<UserFoodRecipeForm> {
     if (mounted) {
       Navigator.of(context).pop();
     }
+  }
+
+  Future<String?> _pickAndUpLoadImage() async {
+    final imageFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (imageFile!=null) {
+      final imagePath = imageFile.path;
+      final storageService = StorageService();
+      final imageUrl = await storageService.uploadImage(imagePath);
+      //user the imageUrl for further processing
+      log(imageUrl);
+      return imageUrl;
+    }
+    return null;
   }
 }

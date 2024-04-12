@@ -17,6 +17,7 @@ import 'package:ct484_project/ui/food/user_food_recipe.dart';
 import 'package:ct484_project/ui/food/user_food_recipe_form.dart';
 import 'package:ct484_project/ui/shared/scaffold_with_navbar.dart';
 import 'package:ct484_project/ui/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
@@ -30,6 +31,16 @@ bool isUserAuthenticated = true;
 Future<void> main() async {
   //load the .env file
   await dotenv.load();
+  WidgetsFlutterBinding.ensureInitialized(); //Khởi tạo Firebase để sử dụng được các dịch vụ khác như Storage
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+    apiKey: 'AIzaSyDwMeKYgOZLjRHwt4xIxWjD2wBXVmW98xo',
+    appId: '1:823352233485:android:891f95732ace261ba54f44',
+    messagingSenderId: '823352233485',
+    projectId: 'cooking-app-8dd74',
+    storageBucket: 'gs://cooking-app-8dd74.appspot.com',
+  ),
+  );
   runApp(MyApp());
 }
 
