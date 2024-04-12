@@ -6,9 +6,11 @@ import 'package:ct484_project/ui/auth/auth_screen.dart';
 import 'package:ct484_project/ui/food/favorite_food_screen.dart';
 import 'package:ct484_project/ui/food/food_overview_screen.dart';
 import 'package:ct484_project/ui/food/food_processing_category.dart';
+import 'package:ct484_project/ui/food/food_recipe_by_category.dart';
 import 'package:ct484_project/ui/food/food_recipe_detail_screen.dart';
 import 'package:ct484_project/ui/food/food_recipes_manager.dart';
 import 'package:ct484_project/ui/food/food_shopping_list_screen.dart';
+import 'package:ct484_project/ui/food/horizontal_food_recipe.dart';
 import 'package:ct484_project/ui/food/shopping_list_detail_screen.dart';
 import 'package:ct484_project/ui/food/shopping_list_manager.dart';
 import 'package:ct484_project/ui/food/user_food_recipe.dart';
@@ -108,6 +110,13 @@ class MyApp extends StatelessWidget {
                 name: 'home',
                 path: '/home',
                 builder: (context, state) => const SafeArea(child: FoodOverviewScreen()),
+                routes: <RouteBase>[
+                  GoRoute(
+                    name: 'home-food-detail',
+                    path: 'home-food-detail',
+                    builder: (context, state) => SafeArea(child: FoodRecipeDetailScreen(state.extra as FoodRecipe)),
+                  )
+                ]
               )
             ]
           ),
@@ -119,6 +128,20 @@ class MyApp extends StatelessWidget {
                 name: 'category',
                 path: '/category',
                 builder: (context, state) => const SafeArea(child: FoodProcessingCategory()),
+                routes: <RouteBase>[
+                  GoRoute(
+                    name: 'food-category-list',
+                    path: 'food-category-list',
+                    builder: (context, state) => SafeArea(child: FoodRecipeByCategory(state.extra as String)),
+                    routes: <RouteBase>[
+                      GoRoute(
+                        name: 'food-category-detail',
+                        path: 'food-category-detail',
+                        builder: (context, state) => SafeArea(child: FoodRecipeDetailScreen(state.extra as FoodRecipe)),
+                      )
+                    ]
+                  )
+                ]
               )
             ]
           ),

@@ -62,7 +62,7 @@ class UserFoodRecipeList extends StatelessWidget {
         },
         onLongPress: () {
           print("Chinh sua hoac xoa");
-          showDialog<String>(
+          !isShowFavorite ? showDialog<String>(
             context: context,
             builder: (BuildContext context) => AlertDialog(
               title: Center(child: const Text("Tùy chọn")),
@@ -117,7 +117,7 @@ class UserFoodRecipeList extends StatelessWidget {
                 )
               ],
             )
-          );
+          ) : '';
         },
       ),
     );

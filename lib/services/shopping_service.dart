@@ -15,34 +15,36 @@ class ShoppingService extends FirebaseService {
       final shoppingList = await httpFetch(
         '$databaseUrl/shopping/$userId.json?auth=$token',
         method: HttpMethod.get,
-      ) as Map<String, dynamic>;
+      ) as Map<String, dynamic>?;
 
       final shoppingItem = await httpFetch(
         '$databaseUrl/shoppingItem/$userId.json?auth=$token',
         method: HttpMethod.get
-      ) as Map<String, dynamic>;
-
-      shoppingList.forEach((shoppingListId, value) {
-        final items = shoppingItem[shoppingListId];
-        List<ShoppingItem> itemList = []; //Lấy danh sách các mục của một danh sách cụ thể
-        if (items!=null) {
-          items.forEach((shoppingItemId, item) { 
-            itemList.add(
-              ShoppingItem.fromJson({
-                'id': shoppingItemId,
-                  ...item
-              })
-            );
-          });
-        }
-        //Thêm từng danh sách với các thuộc tính đầy đủ vào trong full list
-        list.add(
-          ShoppingList.fromJson({
-            'id': shoppingListId,
-            ...value
-          }).copyWith(items: itemList)
-        );
-      });
+      ) as Map<String, dynamic>?;
+      if (shoppingList!=null){
+        shoppingList!.forEach((shoppingListId, value) {
+          final items = shoppingItem![shoppingListId];
+          List<ShoppingItem> itemList = []; //Lấy danh sách các mục của một danh sách cụ thể
+          if (items!=null) {
+            items.forEach((shoppingItemId, item) { 
+              itemList.add(
+                ShoppingItem.fromJson({
+                  'id': shoppingItemId,
+                    ...item
+                })
+              );
+            });
+          }
+          //Thêm từng danh sách với các thuộc tính đầy đủ vào trong full list
+          list.add(
+            ShoppingList.fromJson({
+              'id': shoppingListId,
+              ...value
+            }).copyWith(items: itemList)
+          );
+        });
+      }
+      
       return list;
     } catch(error) {
       log(error.toString());

@@ -26,6 +26,7 @@ class FavoriteFoddScreen extends StatelessWidget {
                   onRefresh: () => context.read<FoodRecipesManager>().fetchAllFoodRecipe(),
                   child: Column(
                     children: <Widget>[
+                      const SizedBox(height: 12,),
                       //Dùng consumer để quan sát sự thay đổi của danh sách favoriteItem 
                       Consumer<FoodRecipesManager>(
                         builder: (ctx, foodRecipesManager, child) {

@@ -7,6 +7,7 @@ import 'package:ct484_project/models/food_recipe.dart';
 import 'package:ct484_project/ui/auth/auth_manager.dart';
 import 'package:ct484_project/ui/food/food_recipes_manager.dart';
 import 'package:ct484_project/ui/food/food_search_field.dart';
+import 'package:ct484_project/ui/food/food_search_screen.dart';
 import 'package:ct484_project/ui/food/staggered_grid_view.dart';
 import 'package:ct484_project/ui/shared/scaffold_with_navbar.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class _FoodOverviewScreenState extends State<FoodOverviewScreen> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              const FoodSearchField(),
+              FoodSearchField(onSubmit: (searchText) => context.read<FoodRecipesManager>().setSearchHomeText(searchText),),
               Expanded(
                 child: FutureBuilder(
                   future: _fetchFoodRecipe,
@@ -61,7 +62,7 @@ class _FoodOverviewScreenState extends State<FoodOverviewScreen> {
                       onRefresh: () => context.read<FoodRecipesManager>().fetchAllFoodRecipe(),
                       child: Consumer<FoodRecipesManager>(
                         builder: (ctx, foodRecipesManager, child) {
-                          return ListView.builder(
+                          return foodRecipesManager.isEmptySearchHome ? ListView.builder(
                             itemCount: foodRecipesManager.foodByTypeList.length,
                             itemBuilder: (context, index)  {
                               Map<String, List<FoodRecipe>> specificTypeList = foodRecipesManager.foodByTypeList[index];
@@ -69,7 +70,7 @@ class _FoodOverviewScreenState extends State<FoodOverviewScreen> {
                               List<FoodRecipe> typeRecipeList = specificTypeList.values.first;
                               return StaggeredGridView(type, typeRecipeList);
                             }
-                          );
+                          ) : FoodSearchScreen(foodRecipesManager.allItems);
                         }
                       ),
                     );

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FoodSearchField extends StatefulWidget {
-  const FoodSearchField({super.key});
+  const FoodSearchField({super.key, this.onSubmit});
+
+  final void Function(String searchText)? onSubmit;
 
   @override
   State<FoodSearchField> createState() => _FoodSearchFieldState();
@@ -62,20 +64,25 @@ class _FoodSearchFieldState extends State<FoodSearchField> {
         labelText: "Nhập công thức cần tìm",
         prefixIcon: Icon(Icons.search),
         constraints: BoxConstraints(maxHeight: 70),
-        suffixIcon: IconButton(icon: Icon(Icons.close),onPressed: () {
+        suffixIcon: IconButton(icon: Icon(Icons.close),
+        onPressed: () {
           _controller.text = '';
           _focusNode.unfocus();
           context.read<FoodRecipesManager>().setSearchText('');
+          context.read<FoodRecipesManager>().setSearchHomeText('');
+
         },)
       ),
       onFieldSubmitted: (value) {
         String searchText = removeVietnameseAccent(value);
         print("Gia tri da nhap la: $searchText");
-        context.read<FoodRecipesManager>().setSearchText(searchText);
+        // context.read<FoodRecipesManager>().setSearchText(searchText);
+        widget.onSubmit!(searchText);
       },
       onChanged: (value) {
         if (value.isEmpty) {
           context.read<FoodRecipesManager>().setSearchText('');
+          context.read<FoodRecipesManager>().setSearchHomeText('');
         }
       },
     );

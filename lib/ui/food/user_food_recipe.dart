@@ -32,7 +32,7 @@ class _UserFoodRecipeState extends State<UserFoodRecipe> {
         children: [
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: FoodSearchField(),
+            child: FoodSearchField(onSubmit: (searchText) => context.read<FoodRecipesManager>().setSearchText(searchText),),
           ),
           Padding(
             padding: const EdgeInsets.all(10.0),

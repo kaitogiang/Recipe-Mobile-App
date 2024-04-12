@@ -11,6 +11,10 @@ class FoodRecipesManager extends ChangeNotifier {
 
   String _searchText = '';
 
+  String _seachHomeText = '';
+
+  CookingType _foodType = CookingType.other;
+
   final FoodRecipeService _foodRecipeService;
 
   FoodRecipesManager([AuthToken? authToken])
@@ -29,7 +33,15 @@ class FoodRecipesManager extends ChangeNotifier {
   }
 
   List<FoodRecipe> get allItems {
-    return [..._allItems];
+    if (_seachHomeText.isEmpty) {
+      return [..._allItems];
+    } else {
+      return _allItems.where((foodRecipe) => removeVietnameseAccent(foodRecipe.title).contains(_seachHomeText)).toList();
+    }
+  }
+
+  List<FoodRecipe> get itemsByType {
+    return _allItems.where((foodRecipe)=>foodRecipe.type == _foodType).toList();
   }
 
   List<Map<String, List<FoodRecipe>>> get foodByTypeList {
@@ -74,7 +86,7 @@ class FoodRecipesManager extends ChangeNotifier {
   }
 
   List<FoodRecipe> get favoriteItems {
-    return _items.where((item) => item.isFavorite).toList();
+    return _allItems.where((item) => item.isFavorite).toList();
   }
 
   String removeVietnameseAccent(String origin) {
@@ -102,6 +114,20 @@ class FoodRecipesManager extends ChangeNotifier {
 
   void setSearchText(String value) {
     _searchText = value;
+    notifyListeners();
+  }
+
+  bool get isEmptySearchHome {
+    return _seachHomeText.isEmpty;
+  }
+
+  void setSearchHomeText(String value) {
+    _seachHomeText = value;
+    notifyListeners();
+  }
+
+  void setFoodType(CookingType type) {
+    _foodType = type;
     notifyListeners();
   }
 
