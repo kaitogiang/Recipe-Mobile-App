@@ -68,6 +68,7 @@ class _UserFoodRecipeFormState extends State<UserFoodRecipeForm> {
   IconLabel? selectedIcon;
   IconType? selectedType;
   String? imageUrl;
+  ValueNotifier<String> networkImageUrl = ValueNotifier("");
 
   bool _isValidImageUrl(String value) {
     return (value.startsWith('http') || value.startsWith('https')) && 
@@ -144,9 +145,37 @@ class _UserFoodRecipeFormState extends State<UserFoodRecipeForm> {
                     _saveForm();
                   },
                 ),
+                ValueListenableBuilder(
+                  valueListenable: networkImageUrl,
+                  builder: (context, value, child) {
+                    return !networkImageUrl.value.isEmpty ? 
+                      Image(
+                        image: NetworkImage(networkImageUrl.value),
+                      )
+                     : Image.network('https://i.imgur.com/sUFH1Aq.png');
+                  },
+                ),
                 ElevatedButton(
                   child: const Text('Chọn hình'),
                   onPressed: _pickAndUpLoadImage,
+                ),
+                ValueListenableBuilder(
+                  valueListenable: networkImageUrl,
+                  builder: (context, value, child) {
+                    return ElevatedButton(
+                      child: const Text("Lấy tên file từ URL"),
+                      onPressed: () async {
+                        final filename = await context.read<FoodRecipesManager>().getImageNameFromUrl(networkImageUrl.value);
+                        log(filename);
+                      },
+                    );
+                  }
+                ),
+                ElevatedButton(
+                  child: const Text('Xóa bỏ ảnh nào đó'),
+                  onPressed: () async {
+                    context.read<FoodRecipesManager>().removeImageFileFromStorage("1712935168579.jpg");
+                  },
                 )
               ],
             ),
@@ -360,10 +389,12 @@ class _UserFoodRecipeFormState extends State<UserFoodRecipeForm> {
     final imageFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (imageFile!=null) {
       final imagePath = imageFile.path;
-      final storageService = StorageService();
-      final imageUrl = await storageService.uploadImage(imagePath);
+      // final storageService = StorageService();
+      // final imageUrl = await storageService.uploadImage(imagePath);
+        final imageUrl = await context.read<FoodRecipesManager>().uploadImage(imagePath);
       //user the imageUrl for further processing
       log(imageUrl);
+      networkImageUrl.value = imageUrl;
       return imageUrl;
     }
     return null;

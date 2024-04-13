@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:ct484_project/models/auth_token.dart';
 import 'package:ct484_project/models/food_recipe.dart';
 import 'package:ct484_project/services/food_recipe_service.dart';
+import 'package:ct484_project/services/storage_service.dart';
 import 'package:flutter/material.dart';
 class FoodRecipesManager extends ChangeNotifier {
   List<FoodRecipe> _items = []; //Lưu trữ sản phẩm của người dùng cụ thể
@@ -16,12 +17,15 @@ class FoodRecipesManager extends ChangeNotifier {
   CookingType _foodType = CookingType.other;
 
   final FoodRecipeService _foodRecipeService;
+  final StorageService _storageService;
 
   FoodRecipesManager([AuthToken? authToken])
-  : _foodRecipeService = FoodRecipeService(authToken);
+  : _foodRecipeService = FoodRecipeService(authToken),
+    _storageService = StorageService(authToken);
 
   set authToken(AuthToken? authToken) {
     _foodRecipeService.authToken = authToken;
+    _storageService.authToken = authToken;
   }
 
   List<FoodRecipe> get items {
@@ -179,6 +183,18 @@ class FoodRecipesManager extends ChangeNotifier {
       foodRecipe.isFavorite = savedState;
     }
     notifyListeners();
+  }
+
+  Future<String> uploadImage(String path) async {
+    return await _storageService.uploadImage(path);
+  }
+
+  Future<String> getImageNameFromUrl(String downloadedUrl) async {
+    return await _storageService.getImageNameFromUrl(downloadedUrl);
+  }
+
+  Future<void> removeImageFileFromStorage(String filename) async {
+    return await _storageService.removeUploadedFile(filename);
   }
 
 }
