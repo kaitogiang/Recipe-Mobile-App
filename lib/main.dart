@@ -41,6 +41,9 @@ Future<void> main() async {
     storageBucket: 'gs://cooking-app-8dd74.appspot.com',
   ),
   );
+  // await FirebaseAppCheck.instance.activate(
+  //   webProvider: ReCaptchaV3Provider(siteKey)
+  // );
   runApp(MyApp());
 }
 
