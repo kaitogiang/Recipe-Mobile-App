@@ -14,19 +14,22 @@ class FoodRecipeByCategory extends StatelessWidget {
       appBar: AppBar(
         title: Text(typeName),
       ),
-      body: RefreshIndicator(
-            onRefresh: () => context.read<FoodRecipesManager>().fetchAllFoodRecipe(),
-            child: Consumer<FoodRecipesManager>(
-              builder: (ctx, foodRecipesManager, child) {
-                return ListView.builder(
-                  itemCount: foodRecipesManager.itemsByType.length,
-                  itemBuilder: (context, index) {
-                    return HorizontalFoodRecipe(foodRecipesManager.itemsByType[index]);
-                  },
-                );
-              }
+      body: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: RefreshIndicator(
+              onRefresh: () => context.read<FoodRecipesManager>().fetchAllFoodRecipe(),
+              child: Consumer<FoodRecipesManager>(
+                builder: (ctx, foodRecipesManager, child) {
+                  return ListView.builder(
+                    itemCount: foodRecipesManager.itemsByType.length,
+                    itemBuilder: (context, index) {
+                      return HorizontalFoodRecipe(foodRecipesManager.itemsByType[index]);
+                    },
+                  );
+                }
+              ),
             ),
-          ),
+      ),
     );
   }
 }
