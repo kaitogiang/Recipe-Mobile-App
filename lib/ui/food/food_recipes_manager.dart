@@ -154,6 +154,7 @@ class FoodRecipesManager extends ChangeNotifier {
     final newFood = await _foodRecipeService.addFoodRecipe(food);
     if (newFood != null) {
       _items.add(newFood);
+      _allItems.add(newFood);
     }
 
     notifyListeners();
@@ -161,9 +162,11 @@ class FoodRecipesManager extends ChangeNotifier {
 
   Future<void> updateFoodRecipe(FoodRecipe food) async {
     final index = _items.indexWhere((item) => item.id == food.id);
+    final indexInAll = _allItems.indexWhere((item) => item.id == food.id);
     if (index >= 0) {
       if (await _foodRecipeService.updateFoodRecipe(food)) {
         _items[index] = food;
+        _allItems[indexInAll] = food;
         notifyListeners();
       }
     }
@@ -172,6 +175,7 @@ class FoodRecipesManager extends ChangeNotifier {
   Future<void> removeFoodRecipe(String foodId) async {
     if (await _foodRecipeService.removeFoodRecipe(foodId)) {
       _items.removeWhere((element) => element.id!.compareTo(foodId)==0);
+      _allItems.removeWhere((element) => element.id!.compareTo(foodId)==0);
     }
     notifyListeners();
   }

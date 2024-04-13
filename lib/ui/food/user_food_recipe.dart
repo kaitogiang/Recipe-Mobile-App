@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../auth/auth_manager.dart';
+
 class UserFoodRecipe extends StatefulWidget {
   const UserFoodRecipe(
     {super.key}
@@ -27,6 +29,14 @@ class _UserFoodRecipeState extends State<UserFoodRecipe> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Công thức nấu ăn của tôi'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              context.read<AuthManager>().logout();
+            },
+          )
+        ],
       ),
       body: Column(
         children: [

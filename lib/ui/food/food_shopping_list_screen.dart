@@ -9,6 +9,8 @@ import 'package:ct484_project/ui/shared/dialog_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../auth/auth_manager.dart';
+
 class FoodShoppingListScreen extends StatefulWidget {
   const FoodShoppingListScreen({super.key});
 
@@ -43,6 +45,14 @@ class _FoodShoppingListScreenState extends State<FoodShoppingListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kế hoạch mua nguyên liệu'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              context.read<AuthManager>().logout();
+            },
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 10),

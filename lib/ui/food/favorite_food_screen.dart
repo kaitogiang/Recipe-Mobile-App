@@ -7,6 +7,8 @@ import 'package:ct484_project/ui/food/user_food_recipe_detail_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../auth/auth_manager.dart';
+
 class FavoriteFoddScreen extends StatelessWidget {
   const FavoriteFoddScreen({super.key});
 
@@ -15,6 +17,14 @@ class FavoriteFoddScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Công thức nấu ăn yêu thích'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              context.read<AuthManager>().logout();
+            },
+          )
+        ],
       ),
       body: FutureBuilder(
             future: context.read<FoodRecipesManager>().fetchAllFoodRecipe(),
