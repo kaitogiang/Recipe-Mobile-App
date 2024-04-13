@@ -42,7 +42,10 @@ class UserFoodRecipeLargList extends StatelessWidget {
           children: <Widget>[
             const SizedBox(height: 15,),
             ClipRRect(
-              child: Image.network(foodRecipe.imageUrl, width: 360,),
+              child: Image(
+                image: NetworkImage(foodRecipe.imageUrl),
+                width: 360,
+              ),
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             const SizedBox(height: 12,),

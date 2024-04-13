@@ -23,7 +23,12 @@ class HorizontalFoodRecipe extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 10),
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: Image.network(foodRecipe.imageUrl, width: 150, height: 100, fit: BoxFit.cover,)
+                      child: Image(
+                        image: NetworkImage(foodRecipe.imageUrl),
+                        width: 150,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      )
                       ),
                 ),
                 Expanded(child: Padding(

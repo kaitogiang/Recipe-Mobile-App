@@ -68,7 +68,7 @@ class _UserFoodRecipeFormState extends State<UserFoodRecipeForm> {
   IconLabel? selectedIcon;
   IconType? selectedType;
   String? imageUrl;
-  ValueNotifier<String> networkImageUrl = ValueNotifier("");
+  String? localPath;
 
   bool _isValidImageUrl(String value) {
     return (value.startsWith('http') || value.startsWith('https')) && 
@@ -80,6 +80,7 @@ class _UserFoodRecipeFormState extends State<UserFoodRecipeForm> {
     _editFood = widget.foodRecipe;
     _imageUrlController.text = _editFood.imageUrl;
     imageUrl = _editFood.imageUrl.isNotEmpty ? _editFood.imageUrl : null;
+    localPath = null;
     selectedIcon = _editFood.isPublic ? IconLabel.public : IconLabel.private;
     switch(_editFood.type) {
       case CookingType.grilling: selectedType = IconType.grilling; break;
@@ -128,16 +129,34 @@ class _UserFoodRecipeFormState extends State<UserFoodRecipeForm> {
                 const SizedBox(height: 12,),
                 _buildDropdownMenu(),
                 const SizedBox(height: 12,),
-                (imageUrl != null) 
-                ? Image.network(
-                  imageUrl!,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.network('https://i.imgur.com/sUFH1Aq.png');
-                  },
-                )
-                : Image.network('https://i.imgur.com/sUFH1Aq.png'),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Nhấp vào để chọn hình", style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 17),)
+                ),
                 const SizedBox(height: 12,),
-                _buildImageField(),
+                Stack(
+                  children: [
+                    (imageUrl != null && localPath == null) 
+                      ? Image(image: NetworkImage(imageUrl!),)
+                      : (localPath != null) 
+                      ? Image.file(
+                        File(localPath!)
+                        )
+                      : Image(
+                        image: NetworkImage("https://firebasestorage.googleapis.com/v0/b/cooking-app-8dd74.appspot.com/o/uploads%2Fno%20background.jpg?alt=media&token=75add647-cab7-4e06-a6e0-414e1a3a84a3"),
+                      ),
+                    Positioned.fill(
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: _pickImage,
+                        ),
+                      )
+                    ),
+                  ],
+                ),
+                // const SizedBox(height: 12,),
+                // _buildImageField(),
                 const SizedBox(height: 12),
                 ElevatedButton(
                   child: _editFood.id == null ? const Text('Thêm công thức mới') : const Text('Lưu thay đổi'),
@@ -145,38 +164,6 @@ class _UserFoodRecipeFormState extends State<UserFoodRecipeForm> {
                     _saveForm();
                   },
                 ),
-                ValueListenableBuilder(
-                  valueListenable: networkImageUrl,
-                  builder: (context, value, child) {
-                    return !networkImageUrl.value.isEmpty ? 
-                      Image(
-                        image: NetworkImage(networkImageUrl.value),
-                      )
-                     : Image.network('https://i.imgur.com/sUFH1Aq.png');
-                  },
-                ),
-                ElevatedButton(
-                  child: const Text('Chọn hình'),
-                  onPressed: _pickAndUpLoadImage,
-                ),
-                ValueListenableBuilder(
-                  valueListenable: networkImageUrl,
-                  builder: (context, value, child) {
-                    return ElevatedButton(
-                      child: const Text("Lấy tên file từ URL"),
-                      onPressed: () async {
-                        final filename = await context.read<FoodRecipesManager>().getImageNameFromUrl(networkImageUrl.value);
-                        log(filename);
-                      },
-                    );
-                  }
-                ),
-                ElevatedButton(
-                  child: const Text('Xóa bỏ ảnh nào đó'),
-                  onPressed: () async {
-                    context.read<FoodRecipesManager>().removeImageFileFromStorage("1712935168579.jpg");
-                  },
-                )
               ],
             ),
           ),
@@ -366,6 +353,14 @@ class _UserFoodRecipeFormState extends State<UserFoodRecipeForm> {
       return;
     }
     _editForm.currentState!.save();
+    if (localPath == null && _editFood.id == null) {
+      _editFood = _editFood.copyWith(imageUrl: 'https://firebasestorage.googleapis.com/v0/b/cooking-app-8dd74.appspot.com/o/uploads%2Fno%20background.jpg?alt=media&token=75add647-cab7-4e06-a6e0-414e1a3a84a3');
+    } else if (localPath==null && _editFood.id != null) {
+      _editFood = _editFood.copyWith(imageUrl: imageUrl);
+    } else {
+      final imageLink = await context.read<FoodRecipesManager>().uploadImage(localPath!);
+      _editFood = _editFood.copyWith(imageUrl: imageLink);
+    }
 
     try {
       final foodRecipesManager = context.read<FoodRecipesManager>();
@@ -385,17 +380,21 @@ class _UserFoodRecipeFormState extends State<UserFoodRecipeForm> {
     }
   }
 
-  Future<String?> _pickAndUpLoadImage() async {
+  Future<String?> _pickImage() async {
     final imageFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (imageFile!=null) {
-      final imagePath = imageFile.path;
-      // final storageService = StorageService();
-      // final imageUrl = await storageService.uploadImage(imagePath);
-        final imageUrl = await context.read<FoodRecipesManager>().uploadImage(imagePath);
-      //user the imageUrl for further processing
-      log(imageUrl);
-      networkImageUrl.value = imageUrl;
-      return imageUrl;
+    // if (imageFile!=null) {
+    //   final imagePath = imageFile.path;
+    //     final imageUrl = await context.read<FoodRecipesManager>().uploadImage(imagePath);
+    //   //user the imageUrl for further processing
+    //   log(imageUrl);
+    //   networkImageUrl.value = imageUrl;
+    //   return imageUrl;
+    // }
+    if (imageFile != null) {
+      setState(() {
+        localPath = imageFile.path;
+      });
+      log('Hinh anh cua editFood: ${_editFood.imageUrl}');
     }
     return null;
   }

@@ -50,7 +50,12 @@ class UserFoodRecipeList extends StatelessWidget {
         child: ListTile(
           subtitle: Text(foodRecipe.ingredient, overflow: TextOverflow.ellipsis, maxLines: 2,),
           title: Text(foodRecipe.title),
-          leading: Image.network(foodRecipe.imageUrl, fit: BoxFit.fill, width: 100, height: 100,)
+          leading: Image(
+            image: NetworkImage(foodRecipe.imageUrl),
+            fit: BoxFit.fill,
+            width: 100,
+            height: 100,
+          )
         ),
         onTap: () {
           print("Xem chi tiet");

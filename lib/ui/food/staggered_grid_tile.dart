@@ -21,7 +21,12 @@ class StaggeredGridTile extends StatelessWidget {
                 SizedBox(
                   height: 120,
                   child: ClipRRect(
-                    child: Image.network(foodRecipe.imageUrl,fit: BoxFit.cover, height: 130, width: 200,),
+                    child: Image(
+                      image: NetworkImage(foodRecipe.imageUrl),
+                      fit: BoxFit.cover,
+                      width: 200,
+                      height: 130,
+                    ),
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
