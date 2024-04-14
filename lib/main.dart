@@ -94,7 +94,7 @@ class MyApp extends StatelessWidget {
                     name: 'user-food-detail',
                     path: 'user-food-detail',
                     builder: (context, state) => SafeArea(child: FoodRecipeDetailScreen(state.extra as FoodRecipe)),
-                    pageBuilder: (context, state) => _createSlideTransition(context, state, FoodRecipeDetailScreen(state.extra as FoodRecipe)),
+                    pageBuilder: (context, state) => _createSlideTransition(context, state, SafeArea(child: FoodRecipeDetailScreen(state.extra as FoodRecipe))),
                   )
                 ]
               )
@@ -113,7 +113,7 @@ class MyApp extends StatelessWidget {
                     name: 'favorite-food-detail',
                     path: 'favorite-food-detail',
                     builder: (context, state) => SafeArea(child: FoodRecipeDetailScreen(state.extra as FoodRecipe)),
-                    pageBuilder: (context, state) => _createSlideTransition(context, state, FoodRecipeDetailScreen(state.extra as FoodRecipe)),
+                    pageBuilder: (context, state) => _createSlideTransition(context, state, SafeArea(child: FoodRecipeDetailScreen(state.extra as FoodRecipe))),
                   )
                 ]
               )
@@ -132,7 +132,7 @@ class MyApp extends StatelessWidget {
                     name: 'home-food-detail',
                     path: 'home-food-detail',
                     builder: (context, state) => SafeArea(child: FoodRecipeDetailScreen(state.extra as FoodRecipe)),
-                    pageBuilder: (context, state) => _createSlideTransition(context, state, FoodRecipeDetailScreen(state.extra as FoodRecipe)),
+                    pageBuilder: (context, state) => _createSlideTransition(context, state, SafeArea(child: FoodRecipeDetailScreen(state.extra as FoodRecipe))),
                   )
                 ]
               )
@@ -151,13 +151,13 @@ class MyApp extends StatelessWidget {
                     name: 'food-category-list',
                     path: 'food-category-list',
                     builder: (context, state) => SafeArea(child: FoodRecipeByCategory(state.extra as String)),
-                    pageBuilder: (context, state) => _createSlideTransition(context, state, FoodRecipeByCategory(state.extra as String)),
+                    pageBuilder: (context, state) => _createSlideTransition(context, state, SafeArea(child: FoodRecipeByCategory(state.extra as String))),
                     routes: <RouteBase>[
                       GoRoute(
                         name: 'food-category-detail',
                         path: 'food-category-detail',
                         builder: (context, state) => SafeArea(child: FoodRecipeDetailScreen(state.extra as FoodRecipe)),
-                        pageBuilder: (context, state) => _createSlideTransition(context, state, FoodRecipeDetailScreen(state.extra as FoodRecipe)),
+                        pageBuilder: (context, state) => _createSlideTransition(context, state, SafeArea(child: FoodRecipeDetailScreen(state.extra as FoodRecipe))),
                       )
                     ]
                   )
