@@ -49,6 +49,22 @@ class FoodRecipe {
     return _isFavorite.value;
   }
 
+  @override
+  String toString() {
+    String typeString = "";
+    switch(type) {
+      case CookingType.grilling: typeString = "mon nuong"; break;
+      case CookingType.stirFrying: typeString = "mon xao"; break;
+      case CookingType.steaming: typeString = "mon hap"; break;
+      case CookingType.boiling: typeString = "mon luoc"; break;
+      case CookingType.drying: typeString = "mon say"; break;
+      case CookingType.mixing: typeString = "mon tron"; break;
+      case CookingType.cooking: typeString = "mon nau"; break;
+      default: typeString = "mon khac"; break;
+    }
+    return title + " " + typeString;
+  }
+
   ValueNotifier<bool> get isPublicListenable {
     return _isPublic;
   }

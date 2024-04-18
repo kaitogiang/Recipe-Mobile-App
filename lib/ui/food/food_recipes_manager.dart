@@ -6,6 +6,8 @@ import 'package:ct484_project/models/food_recipe.dart';
 import 'package:ct484_project/services/food_recipe_service.dart';
 import 'package:ct484_project/services/storage_service.dart';
 import 'package:flutter/material.dart';
+import 'package:fuzzywuzzy/fuzzywuzzy.dart';
+import 'package:fuzzywuzzy/model/extracted_result.dart';
 class FoodRecipesManager extends ChangeNotifier {
   List<FoodRecipe> _items = []; //Lưu trữ sản phẩm của người dùng cụ thể
   List<FoodRecipe> _allItems = []; //Lưu trữ tất cả sản phẩm
@@ -32,7 +34,8 @@ class FoodRecipesManager extends ChangeNotifier {
     if (_searchText.isEmpty) {
       return [..._items];
     } else {
-      return _items.where((foodRecipe) => removeVietnameseAccent(foodRecipe.title).contains(_searchText)).toList();
+      // return _items.where((foodRecipe) => removeVietnameseAccent(foodRecipe.title).contains(_searchText)).toList();
+        return searchResult(_items, _searchText);
     }
   }
 
@@ -40,8 +43,28 @@ class FoodRecipesManager extends ChangeNotifier {
     if (_seachHomeText.isEmpty) {
       return [..._allItems];
     } else {
-      return _allItems.where((foodRecipe) => removeVietnameseAccent(foodRecipe.title).contains(_seachHomeText)).toList();
+
+      // return _allItems.where((foodRecipe) => removeVietnameseAccent(foodRecipe.toString()).contains(_seachHomeText)).toList();
+      return searchResult(_allItems, _seachHomeText);
     }
+  }
+
+  List<FoodRecipe> searchResult(List<FoodRecipe> basedList, String searchText) {
+    List<FoodRecipe> results = []; //Mảng dùng để chứa kết quả tìm kiếm
+    List<String> foodStrings = basedList.map((food) => removeVietnameseAccent(food.toString().replaceAll(' ', ''))).toList();
+    List<ExtractedResult<String>> extractedResults = extractAll(
+      query: removeVietnameseAccent(searchText.replaceAll(' ', '')),
+      choices: foodStrings,
+      cutoff: 10
+    );
+
+    extractedResults.forEach((extractedFood) {
+      if (extractedFood.score > 60) {
+        results.add(basedList[extractedFood.index]);
+      }
+    });
+
+    return results;
   }
 
   List<FoodRecipe> get itemsByType {
